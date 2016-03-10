@@ -5,8 +5,8 @@ require(plotly)
 require(RColorBrewer)
 
 #reads in the functions from the format file
-#setwd("C:/info498f/final-project/scripts/")
-#source("format.R")
+setwd("C:/info498f/final-project/scripts/")
+source("format.R")
 
 #reads in the data and reformats it for data wrangling
 #setwd("C:/info498f/final-project/data/")
@@ -107,15 +107,41 @@ getMaxGraph <- function(data){
   #creates a bar graph that shows the maximum salary in each job type
   max_graph <- plot_ly(max_salary_graph, x = job_title, y = max_salary, type = "bar", 
                        marker = list(color = brewer.pal(6, "PRGn"))) %>% 
-    layout(title = "Maximum Salaries for Job Types at the University of Washington", xaxis = list(title = "Job Title"), yaxis = list(title = "Maximum Salary"))
+    layout(title = "Maximum Salaries for Job Types at the University of Washington", 
+           xaxis = list(title = "Job Title"), yaxis = list(title = "Maximum Salary"))
   
   return(max_graph)
   
 }
 
-                    
+getLineGraph <- function(data){
+  
+  UW_data <- data
+  
+  total_2011 <- sum(select(UW_data, Sal2011))
+  total_2012 <- sum(select(UW_data, Sal2012))
+  total_2013 <- sum(select(UW_data, Sal2013))
+  total_2014 <- sum(select(UW_data, Sal2014))
+  
+  year <- c(2011, 2012, 2013, 2014)
+  total_salary_spending <- c(total_2011, total_2012, total_2013, total_2014)
+  
+  total_salary_df <- data.frame(year, total_salary_spending)
+  
+  line_graph <- plot_ly(total_salary_df, x =  year, y = total_salary_spending, name = "Total Salary Spending at the University of Washington", 
+          line = list(color = rgb(133/255,117/255,158/255), shape = "spline", smoothing = 1.3, width = 5), 
+          marker = list(color = rgb(197/255, 189/255, 104/255), size = 15)) %>% 
+          layout(title = "Total Salary Spending at the University of Washington", 
+                 xaxis = list(title = "Year"), yaxis = list(title = "Amount Spent of Salaries"))
+  
+  return(line_graph)
+}
 
-
-
- 
-
+getHighestPaid <- function(data, yearname){
+  data <- select_(data, "employee_name", "job_title", yearname) %>% rename_("salary" = yearname) %>% 
+    arrange(desc(salary))
+  
+  top <- top_n(data, 1, salary)
+  
+  return(top)
+}
