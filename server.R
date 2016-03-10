@@ -7,6 +7,7 @@ setwd("/Users/kylegoodwin/INFO498F/final-project/")
 salaries <- read.csv("data/AnnualSalary.csv")
 source("scripts/format.R")
 source("scripts/state-level-visualization.r")
+source("scripts/UW_data.r")
 
 #Format data, take out the commas, read strings as integers
 salaries<- getIntegerData(salaries)
@@ -36,6 +37,17 @@ shinyServer(function(input, output) {
   output$overview_text <- renderText({
     paste0("$",getTotalSpending(salaries,input$year))
   })
+  
+  output$max_graph <- renderPlotly({
+    getMaxGraph(salaries)
+    
+  })
+  
+  output$avg_graph <- renderPlotly({
+    getAvgGraph(salaries)
+  })
+  
+  
   
   
 })

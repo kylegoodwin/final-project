@@ -55,7 +55,10 @@ shinyUI(navbarPage('Washington State Budget: Salary Spending', theme = "bootstra
                   sidebarPanel(
                     h1("UW Overview")
                   ),
-                  mainPanel() 
+                  mainPanel(
+                    plotlyOutput("avg_graph"),
+                    plotlyOutput("max_graph")
+                  ) 
                 )
               ),
               #Third Tab

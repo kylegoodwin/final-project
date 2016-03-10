@@ -105,7 +105,7 @@ getMaxGraph <- function(data){
   max_salary_graph <- arrange(jobs_data_frame, desc(max_salary))
   
   #creates a bar graph that shows the maximum salary in each job type
-  max_graph <- plot_ly(max_salary_graph, x = job_title, y = max_graph, type = "bar", 
+  max_graph <- plot_ly(max_salary_graph, x = job_title, y = max_salary, type = "bar", 
                        marker = list(color = brewer.pal(6, "PRGn"))) %>% 
     layout(xaxis = list(title = "Job Title"), yaxis = list(title = "Maximum Salary"))
   
