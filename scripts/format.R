@@ -29,7 +29,7 @@ filterUW <- function(data){
 
 #This function will summarize the way each agency in the state of washington spends money
 summarizeWa <- function(data){
-  grouped_summary <- group_by(data,Agency_Title) %>% summarise(total = sum(Sal2014))g
+  grouped_summary <- group_by(data,Agency_Title) %>% summarise(total = sum(Sal2014))
   wa_total = sum(grouped_summary$total)
   
   big <- filter(grouped_summary, total/wa_total >= .05)
