@@ -90,7 +90,7 @@ getAvgGraph <- function(data){
   #creates a bar graph showing the average salaries in each job type
   avg_graph <- plot_ly(avg_salary_graph, x = job_title, y = avg_salary, type = "bar", 
                        marker = list(color = brewer.pal(6, "PRGn"))) %>% 
-    layout(xaxis = list(title = "Job Title"), yaxis = list(title = "Average Salary"))
+    layout(title = "Average Salaries for Job Types at the University of Washington", xaxis = list(title = "Job Title"), yaxis = list(title = "Average Salary"))
   
   return(avg_graph)
   
@@ -107,7 +107,7 @@ getMaxGraph <- function(data){
   #creates a bar graph that shows the maximum salary in each job type
   max_graph <- plot_ly(max_salary_graph, x = job_title, y = max_salary, type = "bar", 
                        marker = list(color = brewer.pal(6, "PRGn"))) %>% 
-    layout(xaxis = list(title = "Job Title"), yaxis = list(title = "Maximum Salary"))
+    layout(title = "Maximum Salaries for Job Types at the University of Washington", xaxis = list(title = "Job Title"), yaxis = list(title = "Maximum Salary"))
   
   return(max_graph)
   
