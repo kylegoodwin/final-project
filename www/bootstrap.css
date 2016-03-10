@@ -6911,3 +6911,7 @@ input:focus,
 .panel-default .panel-footer {
   color: #98978b;
 }
+
+.well{
+  height: 100vh;
+}
