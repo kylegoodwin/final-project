@@ -4,21 +4,6 @@ require(magrittr)
 require(plotly)
 require(RColorBrewer)
 
-#reads in the functions from the format file
-setwd("C:/info498f/final-project/scripts/")
-source("format.R")
-
-#reads in the data and reformats it for data wrangling
-#setwd("C:/info498f/final-project/data/")
-#data <- read.csv("AnnualSalary.csv")
-#clean_data <- getIntegerData(data)
-
-#filters the data to show only UW employees
-#UW_data <- filterUW(clean_data)
-
-#creates a data frame that contains only the salaries and replaces all of the values of 0
-#with NA, allowing for a column of averages to be added
-
 wrangleData <- function(UW_data){
   df <- select(UW_data, contains("Sal"))
   df[df == 0] <- NA
@@ -29,43 +14,28 @@ wrangleData <- function(UW_data){
   
   #creates a data frame of the salaries of only professors
   professor <- filter(UW_data, grepl("PROFESSOR", job_title))
-  #professor <- rename(professor, "Average Professor Salary" = avg)
   
   #creates a data frame of the salaries of only lecturers
   lecturer <- filter(UW_data, grepl("LECTURER", job_title))
-  #lecturer <- rename(lecturer, "Average Lecturer Salary" = avg)
-  
   
   #creates a data frame of the salaries of only athletic coaches
   coach <- filter(UW_data, grepl("COACH", job_title))
-  #coach <- rename(coach, "Average Coach Salary" = avg)
-  
   
   #creates a data frame of the salaries of only the custodians
   custodian <- filter(UW_data, grepl("CUSTODIAN", job_title))
-  #custodian <- rename(custodian, "Average Custodian Salary" = avg)
-  
   
   #creates a data frame of everyone holding the title "president" including all vice, assistant, and 
   #associate presidents
   president <- filter(UW_data, grepl("PRESIDENT", job_title))
-  #president <- rename(president, "Average President Salary" = avg)
-  
   
   #creates a data frame of the salaries of nurses
   nurse <- filter(UW_data, grepl("NURSE", job_title))
-  #nurse <- rename(nurse, "Average Nurse Salary" = avg)
-  
   
   #creates a data frame that contains the salary of deans
   dean <- filter(UW_data, grepl("DEAN", job_title))
-  #dean <- rename(dean, "Average Dean Salary" = avg)
-  
   
   #creates a data frame that contains the salary of engineers
   engineer <- filter(UW_data, grepl("ENGINEER", job_title))
-  #engineer <- rename(engineer, "Average Engineer Salary" = avg)
-  
   
   
   #creates a dataframe that contains the average and maximum salaries for each general position
@@ -96,6 +66,15 @@ getAvgGraph <- function(data){
   
 }
 
+AvgBarSummary <- function(){
+  return("This bar graph shows the average salary from 2011 to 2014 of employees of the University of Washington. 
+          For the sake of clarity, the President and Dean values refer to anyone with the title President or Dean, 
+          including all associate, assistant, and vice presidents and deans. The graph clearly shows that the average 
+          salary of employees with the title President earn almost twice as much as everyone else. Interestingly, 
+          as shown by the bar graph, the average custodian earns more than than the average lecturer at UW. Also, 
+          the average athletic coach earns more than both the average engineer and average nurse. ")
+}
+
 
 getMaxGraph <- function(data){
   
@@ -112,6 +91,14 @@ getMaxGraph <- function(data){
   
   return(max_graph)
   
+}
+
+maxBarSummary <- function(data){
+  return("This bar graph shows the value of the highest salary in each type of job at the University of 
+          Washington. Shockingly, the highest paid athletic coach (Sarkisian) earns nearly five times more 
+          than the president of the university. The salaries of each of the other job types pail in comparison 
+          to the maximum coach salary. Besides the obvious disparity between the coach salary and the rest of 
+          the salaries, the remainder of the bars on the graph remain largely unchanged in comparison to one another. ")
 }
 
 getLineGraph <- function(data){
@@ -135,6 +122,12 @@ getLineGraph <- function(data){
                  xaxis = list(title = "Year"), yaxis = list(title = "Amount Spent of Salaries"))
   
   return(line_graph)
+}
+
+lineGraphSummary <- function(){
+  return("The line graph above shows the an upward trend in the state's spending on salaries. 
+          Starting at about $2 billion, the spending increases by about $100 million each year, 
+          ending at over $2.3 billion in 2014. ")
 }
 
 getHighestPaid <- function(data, yearname){
