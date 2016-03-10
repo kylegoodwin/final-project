@@ -22,14 +22,19 @@ getIntegerData <- function(data){
 filterUW <- function(data){
   data <- filter(data, Agency_Title == "University of Washington")
   
-  return(data);
+  return(data)
   
 }
 
 
 #This function will summarize the way each agency in the state of washington spends money
-summarizeWa <- function(data){
-  grouped_summary <- group_by(data,Agency_Title) %>% summarise(total = sum(Sal2014))
+#for kyles visualizaion
+summarizeWa <- function(data,yearname){
+  
+  #Filter year for changing data interactivly
+  data <- filterYear(data,yearname)
+  
+  grouped_summary <- group_by(data,Agency_Title) %>% summarise(total = sum(salaries))
   wa_total = sum(grouped_summary$total)
   
   big <- filter(grouped_summary, total/wa_total >= .05)
@@ -41,15 +46,35 @@ summarizeWa <- function(data){
   others$total[1] <- other_total
   others$Agency_Title[1] <- "Other Agencies"
   
-  
-  grouped_summary <- 
+  grouped_summary <- bind_rows(big,others) %>% arrange(desc(total))
 
-  
-  
-  
-  return(grouped_summary);
+  return(grouped_summary)
   
 }
+
+#This function selects the column of salaries from a given year
+filterYear <- function(data, yearname){
+  return(select_(data,"Agency_Title",yearname) %>% rename_( "salaries" = yearname))
+  
+}
+
+#This function returns the data in a format thats readable by the Bar Chart funciton in plotly
+getBarData <- function(data,departments){
+  return(filter(data, Agency_Title %in% departments)$total)
+}
+
+getHighestPaid <- function(data){
+  
+}
+
+#This function gets the total spending on salaries for a given year
+getTotalSpending <- function(data,yearname){
+  data <- filterYear(data,yearname)
+  
+  return(prettyNum(sum(data$salaries),big.mark=",",scientific=FALSE))
+  
+}
+
 
 
 
