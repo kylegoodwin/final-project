@@ -3,11 +3,11 @@
 #Final Projects
 
 #Read in data
-setwd("/Users/kylegoodwin/INFO498F/final-project/")
+#setwd("/Users/kylegoodwin/INFO498F/final-project/")
 salaries <- read.csv("data/AnnualSalary.csv")
 source("scripts/format.R")
 source("scripts/state-level-visualization.r")
-source("scripts/UW_data.r")
+source("scripts/UW_data.R")
 
 #Format data, take out the commas, read strings as integers
 salaries<- getIntegerData(salaries)
@@ -30,24 +30,53 @@ shinyServer(function(input, output) {
     
   })
   
+  #Get description text for Wa Bar graph
   output$bar_text <- renderText({
     getBarText()
   })
   
+  #Get overview text for WA
   output$overview_text <- renderText({
     paste0("$",getTotalSpending(salaries,input$year))
   })
   
-  output$max_graph <- renderPlotly({
-    getMaxGraph(salaries)
+  #Get UW salary type comparison based on input type
+  output$uw_bar_graph <- renderPlotly({
+    returnBar(salaries,input$choice)
     
   })
   
-  output$avg_graph <- renderPlotly({
-    getAvgGraph(salaries)
+  #Get proper summary for above
+  output$uw_bar_summary <- renderText({
+    returnSummary(input$choice)
+  })
+  
+  #Get line plot for UW overview
+  output$uw_line_graph <- renderPlotly({
+    getLineGraph(uw_salaries)
+  })
+  
+  #Get line plot for UW overview
+  output$uw_line_text <- renderText({
+    lineGraphSummary()
+  })
+  
+  #Get total uw spending
+  output$uw_total <- renderText({
+    paste0("$",getTotalSpending(uw_salaries,input$year_uw))
+  })
+  
+  output$sal_compare_text <- renderText({
+    m <- compareToTop(uw_salaries,input$first_name,input$last_name)
+    paste0(m,"x More than your favorite professor")
+  })
+  
+  #Get UW salary type comparison based on input type
+  output$sal_compare_graph <- renderPlotly({
+    getComparisonGraph(uw_salaries,input$first_name,input$last_name)
+    
   })
   
   
-  
-  
+ 
 })

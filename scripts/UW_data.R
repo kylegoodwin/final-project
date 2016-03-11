@@ -4,13 +4,18 @@ require(magrittr)
 require(plotly)
 require(RColorBrewer)
 
-wrangleData <- function(UW_data){
+getAverages <- function(UW_data){
   df <- select(UW_data, contains("Sal"))
   df[df == 0] <- NA
   df$avg = apply(df,1,mean,na.rm=TRUE)
   
+  return (mutate(UW_data, avg = round(df$avg, digits = 0)))
+}
+
+wrangleData <- function(UW_data){
+  
   #adds a new column that shows the average salary between 2011 and 2014
-  UW_data <- mutate(UW_data, avg = round(df$avg, digits = 0))
+  UW_data <- getAverages(UW_data)
   
   #creates a data frame of the salaries of only professors
   professor <- filter(UW_data, grepl("PROFESSOR", job_title))
@@ -60,13 +65,13 @@ getAvgGraph <- function(data){
   #creates a bar graph showing the average salaries in each job type
   avg_graph <- plot_ly(avg_salary_graph, x = job_title, y = avg_salary, type = "bar", 
                        marker = list(color = brewer.pal(6, "PRGn"))) %>% 
-    layout(title = "Average Salaries for Job Types at the University of Washington", xaxis = list(title = "Job Title"), yaxis = list(title = "Average Salary"))
+    layout(title = "", xaxis = list(title = "Job Title"), yaxis = list(title = "Average Salary"))
   
   return(avg_graph)
   
 }
 
-AvgBarSummary <- function(){
+avgBarSummary <- function(){
   return("This bar graph shows the average salary from 2011 to 2014 of employees of the University of Washington. 
           For the sake of clarity, the President and Dean values refer to anyone with the title President or Dean, 
           including all associate, assistant, and vice presidents and deans. The graph clearly shows that the average 
@@ -86,7 +91,7 @@ getMaxGraph <- function(data){
   #creates a bar graph that shows the maximum salary in each job type
   max_graph <- plot_ly(max_salary_graph, x = job_title, y = max_salary, type = "bar", 
                        marker = list(color = brewer.pal(6, "PRGn"))) %>% 
-    layout(title = "Maximum Salaries for Job Types at the University of Washington", 
+    layout(title = "", 
            xaxis = list(title = "Job Title"), yaxis = list(title = "Maximum Salary"))
   
   return(max_graph)
@@ -118,7 +123,7 @@ getLineGraph <- function(data){
   line_graph <- plot_ly(total_salary_df, x =  year, y = total_salary_spending, name = "Total Salary Spending at the University of Washington", 
           line = list(color = rgb(133/255,117/255,158/255), shape = "spline", smoothing = 1.3, width = 5), 
           marker = list(color = rgb(197/255, 189/255, 104/255), size = 15)) %>% 
-          layout(title = "Total Salary Spending at the University of Washington", 
+          layout(title = "", 
                  xaxis = list(title = "Year"), yaxis = list(title = "Amount Spent of Salaries"))
   
   return(line_graph)
@@ -137,4 +142,59 @@ getHighestPaid <- function(data, yearname){
   top <- top_n(data, 1, salary)
   
   return(top)
+}
+
+returnBar <- function(data,num){
+  if(num == 1){
+    return (getAvgGraph(data))
+  }else{
+    return (getMaxGraph(data))
+  }
+}
+
+returnSummary <- function(num){
+  if(num == 1){
+    return (avgBarSummary())
+  }else{
+    return (maxBarSummary())
+  }
+}
+
+
+#UW analyisis ----------------------
+filterPerson <- function(data,firstname,lastname){
+  
+  name = paste0(toupper(lastname),", ",toupper(firstname))
+  regex = paste0("^",name)
+  return( filter(data, grepl(regex,employee_name)) %>% getAverages() %>% top_n(1,avg)) 
+  
+}
+
+getPersonSalary <- function(data,firstname,lastname){
+  data <- filterPerson(data,firstname,lastname)
+  return(data$avg[1])
+}
+
+compareToTop <- function(data,firstname,lastname){
+  sark <- getPersonSalary(data,"STEPHEN","SARKISIAN")
+  person <- getPersonSalary(data,firstname,lastname)
+  
+  return(round(sark/person,digits=0))
+}
+
+#Make graph comparing the salary of an employee to top salary
+getComparisonGraph <- function(data, firstname, lastname){
+  
+  person_salary <- getPersonSalary(data, firstname, lastname)
+  sark_salary <- getPersonSalary(data, "Stephen", "Sarkisian")
+  Name <- c(paste(firstname, lastname, sep = " "), "Sarkisian")
+  Salary <- c(person_salary, sark_salary)
+  
+  df <- data.frame(Name, Salary)
+  
+  #creates a bar graph showing the average salaries in each job type
+  sarkComparisonGraph <- plot_ly(df, x = Name, y = Salary, type = "bar", 
+                                 marker = list(color =  list(rgb(133/255,117/255,158/255),rgb(197/255, 189/255, 104/255))))
+  
+  return(sarkComparisonGraph)
 }
