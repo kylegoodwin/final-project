@@ -1,4 +1,4 @@
-#setwd("/Users/kylegoodwin/INFO498F/final-project/")
+setwd("/Users/kylegoodwin/INFO498F/final-project/")
 
 library(dplyr)
 library(shiny)

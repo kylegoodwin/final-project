@@ -1,3 +1,4 @@
+#Kyle Goodiwn
 #State Level Trends Visualization
 require(dplyr)
 require(plotly)
@@ -40,6 +41,8 @@ barChart <- function(xvalues,yvalues){
   
 }
 
+
+#This funciton returns a block of text about the bar chart
 getBarText <- function(){
   return("This bar chart allows you visually compare the salary spending of each department
          of the State of Washington, allowing you easily see how much larger the University
@@ -48,6 +51,7 @@ getBarText <- function(){
          able to see how this money is allocated. ")
 }
 
+#This function returns a block of text about the pie chart
 getPieText <- function(){
   return("The Percentage of Salary Spending pie chart shows the breakdown of the state’s spending on salaries
          in different sectors. About 30% of the state’s salary spending goes to the University of Washington, 

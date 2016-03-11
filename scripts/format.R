@@ -1,4 +1,5 @@
-#Manipulate Data
+#Kyle Goodwin
+#This file Manipulate Data to make it more easily visualized
 require(dplyr)
 
 

@@ -1,3 +1,6 @@
+#Conor Reiland, Kyle Goodwin
+#This file creates visualizations about the Washington salaries data set
+
 require(dplyr)
 require(knitr)
 require(magrittr)
@@ -106,20 +109,24 @@ maxBarSummary <- function(data){
           the salaries, the remainder of the bars on the graph remain largely unchanged in comparison to one another. ")
 }
 
+#This function produces a line graph showing the increase of salary spending over time
 getLineGraph <- function(data){
   
   UW_data <- data
   
+  #Get spending totals
   total_2011 <- sum(select(UW_data, Sal2011))
   total_2012 <- sum(select(UW_data, Sal2012))
   total_2013 <- sum(select(UW_data, Sal2013))
   total_2014 <- sum(select(UW_data, Sal2014))
   
+  #Get lables
   year <- c(2011, 2012, 2013, 2014)
   total_salary_spending <- c(total_2011, total_2012, total_2013, total_2014)
   
   total_salary_df <- data.frame(year, total_salary_spending)
   
+  #Make and return graph
   line_graph <- plot_ly(total_salary_df, x =  year, y = total_salary_spending, name = "Total Salary Spending at the University of Washington", 
           line = list(color = rgb(133/255,117/255,158/255), shape = "spline", smoothing = 1.3, width = 5), 
           marker = list(color = rgb(197/255, 189/255, 104/255), size = 15)) %>% 
@@ -129,6 +136,7 @@ getLineGraph <- function(data){
   return(line_graph)
 }
 
+#Get text summary of line graph
 lineGraphSummary <- function(){
   return("The line graph above shows the an upward trend in the state's spending on salaries. 
           Starting at about $2 billion, the spending increases by about $100 million each year, 
@@ -162,6 +170,8 @@ returnSummary <- function(num){
 
 
 #UW analyisis ----------------------
+
+#Filter dataframe down to one individual
 filterPerson <- function(data,firstname,lastname){
   
   name = paste0(toupper(lastname),", ",toupper(firstname))
@@ -170,6 +180,7 @@ filterPerson <- function(data,firstname,lastname){
   
 }
 
+#Find the salary of an individual
 getPersonSalary <- function(data,firstname,lastname){
   data <- filterPerson(data,firstname,lastname)
   return(data$avg[1])
