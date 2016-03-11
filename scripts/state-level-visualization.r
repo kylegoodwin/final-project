@@ -48,4 +48,13 @@ getBarText <- function(){
          able to see how this money is allocated. ")
 }
 
+getPieText <- function(){
+  return("The Percentage of Salary Spending pie chart shows the breakdown of the state’s spending on salaries
+         in different sectors. About 30% of the state’s salary spending goes to the University of Washington, 
+         while only about 5.5% goes to Washington State University. The state spends about three times more on
+         UW salaries than on salaries for social and health service employees, and about five times more than 
+         corrections and transportation.")
+
+}
+
 

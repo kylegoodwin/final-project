@@ -44,7 +44,8 @@ shinyUI(navbarPage('Washington State Budget: Salary Spending', theme = "bootstra
                   plotlyOutput("bar_chart"),
                   p(textOutput("bar_text")),
                   h2("Percentage of State Salary Spending"),
-                  plotlyOutput("pie_chart")
+                  plotlyOutput("pie_chart"),
+                  p(textOutput("pie_text"))
                   )
                 )
                 ),

@@ -1,12 +1,18 @@
 #Kyle Goodwin
 #INFO 498f
-#Final Projects
+#Final Project - Washington Salary Comparison Tool
 
 #Read in data
 #setwd("/Users/kylegoodwin/INFO498F/final-project/")
 salaries <- read.csv("data/AnnualSalary.csv")
+
+#This file contains functions that format the data in a better way
 source("scripts/format.R")
+
+#This file contains the state-level graphs
 source("scripts/state-level-visualization.r")
+
+#This file contains functions that manipulate the data for use at a UW-wide level
 source("scripts/UW_data.R")
 
 #Format data, take out the commas, read strings as integers
@@ -66,6 +72,7 @@ shinyServer(function(input, output) {
     paste0("$",getTotalSpending(uw_salaries,input$year_uw))
   })
   
+  #Display how many more times The head coach salary is
   output$sal_compare_text <- renderText({
     m <- compareToTop(uw_salaries,input$first_name,input$last_name)
     paste0(m,"x More than your favorite professor")
@@ -75,6 +82,11 @@ shinyServer(function(input, output) {
   output$sal_compare_graph <- renderPlotly({
     getComparisonGraph(uw_salaries,input$first_name,input$last_name)
     
+  })
+  
+  #Display information about pie graph
+  output$pie_text <- renderText({
+    getPieText()
   })
   
   
